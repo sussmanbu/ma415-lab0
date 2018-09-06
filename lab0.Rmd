@@ -1,0 +1,97 @@
+---
+title: 'MA [46]15: Workflow example'
+author: "Luis Carvalho"
+date: '2018-09-07'
+output:
+  html_notebook: default
+  pdf_document:
+    latex_engine: xelatex
+  html_document:
+    df_print: paged
+subtitle: Based on Lecture 2
+---
+
+```{r setup, include=FALSE}
+options(show.signif.stars = FALSE)
+knitr::opts_chunk$set(tidy = FALSE) # turn off formatR's tidy
+knitr::opts_chunk$set(fig.path="figures/", out.width="70%", fig.align = "center")
+```
+
+# Introduction
+
+This is a simple notebook documenting the basic analyses in Lecture 2 of MA 415 / MA 615.
+
+
+## Setting up R
+
+After starting RStudio, we load packages in `tidyverse`:
+
+```{r tidyverse}
+library(tidyverse)
+```
+
+If the package is not installed, we can do it with:
+
+```{r install, eval=FALSE}
+install.packages("tidyverse") # it may take a while!
+```
+
+# Exploring the data
+
+We will be using the `mpg` dataset on fuel economy data:
+
+```{r mpg}
+mpg
+```
+
+We get a description of the dataset by issuing `help(mpg)` or just `?mpg`.
+
+Our main *question of interest* is to find a relationship between `displ` (engine displacement in litres) and `hwy` (highway mileage). Initial visualization with a scatterplot:
+
+```{r displhwy1}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + geom_point()
+```
+
+Mileage seems to *decrease* with engine size; what is the effect of `cyl` (number of cylinders)?
+
+```{r displhwy2}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(aes(color = cyl))
+```
+
+We notice that `cyl` has only a few values so it's best seen as a *factor* (categorical variable):
+
+```{r displhwy3}
+ggplot(data = mpg %>% mutate(cyl = factor(cyl)),
+       aes(x = displ, y = hwy)) + geom_point(aes(color = cyl))
+```
+
+
+## A bit of modeling
+
+There seems to be a functional relationship between `displ` and `hwy`:
+
+```{r displhwy4, message=FALSE}
+ggplot(mpg %>% mutate(cyl = factor(cyl)), aes(displ, hwy)) +
+  geom_point(aes(color = cyl)) +
+  geom_smooth()
+```
+
+We can attempt to find such a relationship using a linear model. We assume that if $H$ is `hwy` and $D$ is `displ` then, at least approximately on average,
+
+$$\log(H) = \alpha + \beta \cdot \log(D)$$
+that is, $H \propto D^{\beta}$. Fitting the model yields
+
+```{r lm}
+fit <- lm(log(hwy) ~ log(displ), data = mpg) 
+coef(fit)
+```
+and thus
+$$H \approx C / \sqrt{D}.$$
+
+A visual check seems to confirm that `hwy` has an approximately linear relationship with the inverse square root of `displ`:
+
+```{r displhwy5}
+ggplot(mpg %>% mutate(cyl = factor(cyl))) +
+  geom_point(aes(x = 1 / sqrt(displ), y = hwy, color = cyl))
+```
