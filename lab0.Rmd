@@ -91,7 +91,9 @@ $$H \approx C / \sqrt{D}.$$
 
 A visual check seems to confirm that `hwy` has an approximately linear relationship with the inverse square root of `displ`:
 
-```{r displhwy5}
-ggplot(mpg %>% mutate(cyl = factor(cyl))) +
-  geom_point(aes(x = 1 / sqrt(displ), y = hwy, color = cyl))
+```{r displhwy5, message=FALSE}
+ggplot(mpg %>% mutate(cyl = factor(cyl)),
+       aes(1 / sqrt(displ), hwy)) +
+  geom_point(aes(color = cyl)) +
+  geom_smooth()
 ```
