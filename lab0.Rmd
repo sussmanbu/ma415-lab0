@@ -3,11 +3,11 @@ title: 'MA [46]15: Workflow example'
 author: "Luis Carvalho"
 date: '2018-09-07'
 output:
-  html_notebook: default
   pdf_document:
     latex_engine: xelatex
   html_document:
     df_print: paged
+  html_notebook: default
 subtitle: Based on Lecture 2
 ---
 
