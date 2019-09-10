@@ -66,7 +66,7 @@ git config --global user.email
 
 ## Quick exercise
 
-- Go to the public repository [`bu-ma415/lab0`](https://github.com/bu-ma415/lab0) and "clone" it:
+- Go to the public repository [`sussmanbu/ma415-lab0`](https://github.com/sussmanbu/ma415-lab0/)and "clone" it:
 
   * Click on "Clone or download" and copy the link under "Clone with HTTPS"
 
