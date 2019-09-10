@@ -1,10 +1,8 @@
 ---
 title: 'MA [46]15: Workflow example'
-author: "Luis Carvalho"
+author: "Daniel Sussman"
 date: '2018-09-07'
 output:
-  pdf_document:
-    latex_engine: xelatex
   html_document:
     df_print: paged
   html_notebook: default
